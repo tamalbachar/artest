@@ -1,0 +1,52 @@
+<html>
+<head>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script>
+  <script src="https://rawgit.com/google-ar/three.ar.js/master/build/three.ar.js"></script>
+</head>
+<body style="margin : 0px; overflow: hidden;">
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-entity id="camera" camera look-controls wasd-controls></a-entity>
+    <a-entity id="arrow" gltf-model="arrow.glb" scale="0.1 0.1 0.1" visible="false"></a-entity>
+    <a-entity id="road" plane geometry="width: 10; height: 10;" material="color: gray; opacity: 0.5;" visible="false"></a-entity>
+    <script>
+      // Get the three.js scene
+      var scene = document.querySelector('a-scene').object3D;
+      // Get the camera entity
+      var camera = document.querySelector('#camera');
+      // Get the arrow entity
+      var arrow = document.querySelector('#arrow');
+      // Get the road entity
+      var road = document.querySelector('#road');
+      
+      // Create a three.ar.js session
+      var session = new THREE.ARSession({
+        // Enable hit testing to detect surfaces
+        hitTest: true,
+        // Enable plane detection to find horizontal planes
+        planeDetection: 'horizontal'
+      });
+      
+      // Add the session to the scene
+      scene.add(session);
+      
+      // Listen for hit test results
+      session.addEventListener('hit', function(event) {
+        // Get the first hit result
+        var hit = event.detail.hits[0];
+        if (hit) {
+          // Show the arrow and the road entities
+          arrow.setAttribute('visible', true);
+          road.setAttribute('visible', true);
+          // Position the arrow and the road entities at the hit point
+          arrow.object3D.position.copy(hit.point);
+          road.object3D.position.copy(hit.point);
+          // Orient the arrow entity towards the camera entity
+          arrow.object3D.lookAt(camera.object3D.position);
+        }
+      });
+      
+    </script>
+  </a-scene>
+</body>
+</html>
