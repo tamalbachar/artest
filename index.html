@@ -2,14 +2,29 @@
 <head>
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script>
-  <script src="https://rawgit.com/google-ar/three.ar.js/master/build/three.ar.js"></script>
+  <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.153.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.153.0/examples/jsm/"
+    }
+  }
+</script>
+  <!-- <script src="https://rawgit.com/google-ar/three.ar.js/master/build/three.ar.js"></script> -->
+  <!-- <script src="https://github.com/JamesLMilner/THREEAR/blob/master/dist/THREEAR.js"></script> -->
+   <!-- <script src="https://github.com/mrdoob/three.js/blob/master/build/three.js"></script> -->
 </head>
 <body style="margin : 0px; overflow: hidden;">
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <a-entity id="camera" camera look-controls wasd-controls></a-entity>
-    <a-entity id="arrow" gltf-model="arrow.glb" scale="0.1 0.1 0.1" visible="false"></a-entity>
+    <a-entity camera look-controls>
+      <a-entity geometry="primitive: plane; height: 0.2; width: 0.2" position="0 0 -1"
+                material="color: gray; opacity: 0.5"></a-entity>
+    </a-entity>
+    <a-entity id="arrow" gltf-model="arrow.glb" scale="0.1 0.1 0.1" visible="false" ar-hit-test look-at="#camera" animation="property: position; dir: alternate; dur: 1000; easing: easeInOutSine; loop: true; to: 0 0.2 0"></a-entity>
     <a-entity id="road" plane geometry="width: 10; height: 10;" material="color: gray; opacity: 0.5;" visible="false"></a-entity>
-    <script src = "script.js"></script>
+    <script type ="module" src = "script.js"></script>
   </a-scene>
 </body>
 </html>
